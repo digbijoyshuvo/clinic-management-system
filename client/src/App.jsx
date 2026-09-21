@@ -7,7 +7,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 import PatientList from './pages/PatientList';
 import PatientForm from './pages/PatientForm';
 import PatientDetail from './pages/PatientDetail';
-
+import BookAppointment from './pages/BookAppointment';
+import AppointmentList from './pages/AppointmentList';
+import DoctorSchedule from './pages/DoctorSchedule';
 function App() {
   return (
     <Router>
@@ -37,6 +39,14 @@ function App() {
             <Route path="/patients/new" element={<PatientForm />} />
             <Route path="/patients/:id" element={<PatientDetail />} />
             <Route path="/patients/:id/edit" element={<PatientForm />} />
+
+            <Route path="/appointments/book" element={<BookAppointment />} />
+            <Route path="/appointments" element={<AppointmentList />} />
+          </Route>
+
+          {/* Doctor Routes */}
+          <Route element={<ProtectedRoute allowedRoles={['doctor']} />}>
+            <Route path="/doctor/schedule" element={<DoctorSchedule />} />
           </Route>
 
           {/* Fallback route */}
