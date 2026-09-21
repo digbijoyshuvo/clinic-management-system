@@ -104,6 +104,22 @@ router.get('/', protect, async (req, res) => {
   }
 });
 
+// @route   GET /api/appointments/doctors
+// @desc    Get all doctors
+// @access  Private
+router.get('/doctors', protect, async (req, res) => {
+  try {
+    const doctors = await User.find({ role: 'doctor' })
+      .select('_id name email');
+
+    res.json(doctors);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: 'Server Error'
+    });
+  }
+});
 
 // @route   GET /api/appointments/doctor/:doctorId
 // @desc    Get appointments for a specific doctor

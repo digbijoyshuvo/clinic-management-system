@@ -36,4 +36,6 @@ export const completeAppointment = (id) =>
 export const getPatients = () =>
   API.get('/patients');
 
+export const getDoctors = () =>
+  API.get('/appointments/doctors');
 export default API;

@@ -1,12 +1,17 @@
 
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createAppointment, getPatients } from '../api/appointments';
+import {
+  createAppointment,
+  getPatients,
+  getDoctors
+} from '../api/appointments';
 
 function BookAppointment() {
   const navigate = useNavigate();
 
   const [patients, setPatients] = useState([]);
+  const [doctors, setDoctors] = useState([]);
   const [form, setForm] = useState({
     patient: '',
     doctor: '',
@@ -16,11 +21,24 @@ function BookAppointment() {
   });
   const [message, setMessage] = useState('');
 
-  useEffect(() => {
-    getPatients()
-      .then((res) => setPatients(res.data))
-      .catch(() => setMessage('Failed to load patients'));
-  }, []);
+ useEffect(() => {
+  const loadData = async () => {
+    try {
+      const patientRes = await getPatients();
+      const doctorRes = await getDoctors();
+
+      setPatients(patientRes.data);
+      setDoctors(doctorRes.data);
+    } catch (error) {
+      setMessage(
+        error.response?.data?.message ||
+        'Failed to load patients or doctors'
+      );
+    }
+  };
+
+  loadData();
+}, []);
 
   const handleChange = (e) => {
     setForm({
@@ -75,6 +93,22 @@ function BookAppointment() {
               {patient.name}
             </option>
           ))}
+        </select>
+
+        <select
+          name="doctor"
+          value={form.doctor}
+          onChange={handleChange}
+          required
+          className="w-full border p-2 rounded"
+        >
+          <option value="">Select Doctor</option>
+
+           {doctors.map((doctor) => (
+             <option key={doctor._id} value={doctor._id}>
+               {doctor.name}
+             </option>
+           ))}
         </select>
 
         <input
