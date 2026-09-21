@@ -4,6 +4,9 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import AdminDashboard from './pages/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import PatientList from './pages/PatientList';
+import PatientForm from './pages/PatientForm';
+import PatientDetail from './pages/PatientDetail';
 
 function App() {
   return (
@@ -26,6 +29,14 @@ function App() {
           {/* Admin Routes */}
           <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          </Route>
+
+          {/* Patient Routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/patients" element={<PatientList />} />
+            <Route path="/patients/new" element={<PatientForm />} />
+            <Route path="/patients/:id" element={<PatientDetail />} />
+            <Route path="/patients/:id/edit" element={<PatientForm />} />
           </Route>
 
           {/* Fallback route */}

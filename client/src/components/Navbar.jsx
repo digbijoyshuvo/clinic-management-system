@@ -80,13 +80,22 @@ const Navbar = () => {
                     My Appointments
                   </span>
                 )}
-                {user.role === 'receptionist' && (
-                  <span className="px-4 py-2 rounded-lg text-sm font-medium text-surface-400 cursor-not-allowed flex items-center gap-2">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                    Manage Patients
-                  </span>
+                {(user.role === 'receptionist' || user.role === 'admin' || user.role === 'doctor') && (
+                  <Link
+                    to="/patients"
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                      isActive('/patients')
+                        ? 'bg-primary-50 text-primary-700'
+                        : 'text-surface-600 hover:bg-surface-100 hover:text-surface-800'
+                    }`}
+                  >
+                    <span className="flex items-center gap-2">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                      Patients
+                    </span>
+                  </Link>
                 )}
 
                 <div className="w-px h-8 bg-surface-200 mx-2"></div>
