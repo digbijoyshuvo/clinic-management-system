@@ -17,8 +17,8 @@ axiosInstance.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
-export const login = async (email, password) => {
-  const response = await axiosInstance.post('/auth/login', { email, password });
+export const login = async (email, password, role) => {
+  const response = await axiosInstance.post('/auth/login', { email, password, role });
   if (response.data) {
     localStorage.setItem('user', JSON.stringify(response.data));
   }

@@ -24,6 +24,9 @@ export const getDoctorAppointments = (doctorId) =>
 export const createAppointment = (data) =>
   API.post('/appointments', data);
 
+export const approveAppointment = (id, reportingTime) =>
+  API.put(`/appointments/${id}/approve`, { reportingTime });
+
 export const updateAppointment = (id, data) =>
   API.put(`/appointments/${id}`, data);
 

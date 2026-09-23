@@ -2,13 +2,15 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import AdminDashboard from './pages/AdminDashboard';
+import ReceptionistDashboard from './pages/ReceptionistDashboard';
+import UserDashboard from './pages/UserDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import PatientList from './pages/PatientList';
+import DoctorList from './pages/DoctorList';
+import AppointmentList from './pages/AppointmentList';
+import BookAppointment from './pages/BookAppointment';
 import PatientForm from './pages/PatientForm';
 import PatientDetail from './pages/PatientDetail';
-import BookAppointment from './pages/BookAppointment';
-import AppointmentList from './pages/AppointmentList';
 import DoctorSchedule from './pages/DoctorSchedule';
 function App() {
   return (
@@ -28,9 +30,20 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* Admin Routes */}
-          <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          {/* Receptionist Routes */}
+          <Route element={<ProtectedRoute allowedRoles={['receptionist']} />}>
+            <Route path="/receptionist/dashboard" element={<ReceptionistDashboard />} />
+            <Route path="/receptionist/patients" element={<PatientList />} />
+            <Route path="/receptionist/doctors" element={<DoctorList />} />
+            <Route path="/receptionist/appointments" element={<AppointmentList />} />
+          </Route>
+
+          {/* Normal User Routes */}
+          <Route element={<ProtectedRoute allowedRoles={['normal']} />}>
+            <Route path="/user/dashboard" element={<UserDashboard />} />
+            <Route path="/user/appointments/book" element={<BookAppointment />} />
+            <Route path="/user/appointments" element={<AppointmentList />} />
+            <Route path="/user/doctors" element={<DoctorList />} />
           </Route>
 
           {/* Patient Routes */}
@@ -48,7 +61,6 @@ function App() {
           <Route element={<ProtectedRoute allowedRoles={['doctor']} />}>
             <Route path="/doctor/schedule" element={<DoctorSchedule />} />
           </Route>
-
           {/* Fallback route */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

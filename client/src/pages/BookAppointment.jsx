@@ -1,162 +1,135 @@
 
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  createAppointment,
-  getPatients,
-  getDoctors
-} from '../api/appointments';
+import { createAppointment } from '../api/appointments';
+import { getDoctors } from '../api/doctors';
 
-function BookAppointment() {
+const BookAppointment = () => {
   const navigate = useNavigate();
-
-  const [patients, setPatients] = useState([]);
   const [doctors, setDoctors] = useState([]);
-  const [form, setForm] = useState({
-    patient: '',
+  const [formData, setFormData] = useState({
     doctor: '',
-    date: '',
-    time: '',
+    preferredDate: '',
+    preferredTime: '',
+    patientName: '',
+    patientAge: '',
+    patientPhone: '',
     reason: ''
   });
-  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
- useEffect(() => {
-  const loadData = async () => {
-    try {
-      const patientRes = await getPatients();
-      const doctorRes = await getDoctors();
-
-      setPatients(patientRes.data);
-      setDoctors(doctorRes.data);
-    } catch (error) {
-      setMessage(
-        error.response?.data?.message ||
-        'Failed to load patients or doctors'
-      );
-    }
-  };
-
-  loadData();
-}, []);
-
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value
-    });
-  };
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const data = await getDoctors();
+        setDoctors(data);
+      } catch (err) {
+        console.error('Failed to load doctors', err);
+      }
+    };
+    fetchDoctors();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage('');
-
+    setLoading(true);
+    setError('');
+    setSuccess('');
+    
     try {
-      await createAppointment(form);
-      setMessage('Appointment booked successfully');
-      setForm({
-        patient: '',
-        doctor: '',
-        date: '',
-        time: '',
-        reason: ''
-      });
-    } catch (error) {
-      setMessage(
-        error.response?.data?.message || 'Failed to book appointment'
-      );
+      const submitData = {
+        ...formData,
+        patientAge: Number(formData.patientAge)
+      };
+      await createAppointment(submitData);
+      setSuccess('Appointment booked successfully! Redirecting...');
+      setTimeout(() => navigate('/user/appointments'), 1500);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to book appointment');
+    } finally {
+      setLoading(false);
     }
   };
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
   return (
-    <div className="max-w-xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">
-        Book Appointment
-      </h1>
+    <div className="p-8 max-w-3xl mx-auto min-h-[calc(100vh-64px)] animate-fade-in-up">
+      <div className="bg-white rounded-3xl p-8 shadow-sm border border-surface-200/60">
+        <h1 className="text-3xl font-bold text-surface-900 mb-2">Book an Appointment</h1>
+        <p className="text-surface-600 mb-8">Please fill in your details and preferred time. The receptionist will review and assign your reporting time.</p>
 
-      {message && (
-        <p className="mb-4 text-blue-600">{message}</p>
-      )}
+        {error && (
+          <div className="mb-6 p-4 bg-danger-500/10 border border-danger-500/20 rounded-xl text-danger-600">
+            {error}
+          </div>
+        )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <select
-          name="patient"
-          value={form.patient}
-          onChange={handleChange}
-          required
-          className="w-full border p-2 rounded"
-        >
-          <option value="">Select Patient</option>
+        {success && (
+          <div className="mb-6 p-4 bg-success-500/10 border border-success-500/20 rounded-xl text-success-600">
+            {success}
+          </div>
+        )}
 
-          {patients.map((patient) => (
-            <option key={patient._id} value={patient._id}>
-              {patient.name}
-            </option>
-          ))}
-        </select>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-semibold text-surface-700 mb-2">Patient Name</label>
+              <input type="text" name="patientName" required value={formData.patientName} onChange={handleChange} className="w-full px-4 py-3 bg-surface-50 border border-surface-200 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-400 outline-none" placeholder="Enter patient name" />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-surface-700 mb-2">Patient Age</label>
+              <input type="number" name="patientAge" required min="0" max="150" value={formData.patientAge} onChange={handleChange} className="w-full px-4 py-3 bg-surface-50 border border-surface-200 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-400 outline-none" placeholder="Age" />
+            </div>
+          </div>
+          
+          <div>
+            <label className="block text-sm font-semibold text-surface-700 mb-2">Patient Phone</label>
+            <input type="tel" name="patientPhone" required value={formData.patientPhone} onChange={handleChange} className="w-full px-4 py-3 bg-surface-50 border border-surface-200 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-400 outline-none" placeholder="Enter phone number" />
+          </div>
 
-        <select
-          name="doctor"
-          value={form.doctor}
-          onChange={handleChange}
-          required
-          className="w-full border p-2 rounded"
-        >
-          <option value="">Select Doctor</option>
+          <div>
+            <label className="block text-sm font-semibold text-surface-700 mb-2">Select Doctor</label>
+            <select name="doctor" required value={formData.doctor} onChange={handleChange} className="w-full px-4 py-3 bg-surface-50 border border-surface-200 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-400 outline-none appearance-none">
+              <option value="">-- Select a Doctor --</option>
+              {doctors.map(doc => (
+                <option key={doc._id} value={doc._id}>{doc.name} — {doc.speciality}</option>
+              ))}
+            </select>
+            {doctors.length === 0 && (
+              <p className="text-xs text-warning-600 mt-1">No doctors available. Ask the receptionist to add doctors first.</p>
+            )}
+          </div>
 
-           {doctors.map((doctor) => (
-             <option key={doctor._id} value={doctor._id}>
-               {doctor.name}
-             </option>
-           ))}
-        </select>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-semibold text-surface-700 mb-2">Preferred Date</label>
+              <input type="date" name="preferredDate" required value={formData.preferredDate} onChange={handleChange} className="w-full px-4 py-3 bg-surface-50 border border-surface-200 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-400 outline-none" />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-surface-700 mb-2">Preferred Time</label>
+              <input type="time" name="preferredTime" required value={formData.preferredTime} onChange={handleChange} className="w-full px-4 py-3 bg-surface-50 border border-surface-200 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-400 outline-none" />
+              <p className="text-xs text-surface-500 mt-1">This is only a preference. The receptionist will assign the exact reporting time.</p>
+            </div>
+          </div>
 
-        <input
-          type="text"
-          name="doctor"
-          placeholder="Doctor ID"
-          value={form.doctor}
-          onChange={handleChange}
-          required
-          className="w-full border p-2 rounded"
-        />
+          <div>
+            <label className="block text-sm font-semibold text-surface-700 mb-2">Reason for visit (optional)</label>
+            <textarea name="reason" rows="3" value={formData.reason} onChange={handleChange} className="w-full px-4 py-3 bg-surface-50 border border-surface-200 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-400 outline-none" placeholder="Describe the reason for your visit"></textarea>
+          </div>
 
-        <input
-          type="date"
-          name="date"
-          value={form.date}
-          onChange={handleChange}
-          required
-          className="w-full border p-2 rounded"
-        />
-
-        <input
-          type="time"
-          name="time"
-          value={form.time}
-          onChange={handleChange}
-          required
-          className="w-full border p-2 rounded"
-        />
-
-        <textarea
-          name="reason"
-          placeholder="Reason for appointment"
-          value={form.reason}
-          onChange={handleChange}
-          required
-          className="w-full border p-2 rounded"
-        />
-
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded"
-        >
-          Book Appointment
-        </button>
-      </form>
+          <button type="submit" disabled={loading} className="w-full py-4 bg-primary-600 text-white rounded-xl font-bold shadow-lg shadow-primary-500/30 hover:bg-primary-700 transition-colors disabled:opacity-60">
+            {loading ? 'Booking...' : 'Book Appointment'}
+          </button>
+        </form>
+      </div>
     </div>
   );
-}
+};
+
 
 export default BookAppointment;

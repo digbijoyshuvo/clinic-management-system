@@ -8,6 +8,12 @@ const generateToken = (id) => {
   });
 };
 
+const RECEPTIONIST_EMAILS = [
+  'digbijoy2003@gmail.com',
+  'mugdho@gmail.com',
+  'omi@gmail.com'
+];
+
 // @desc    Register a new user
 // @route   POST /api/auth/register
 // @access  Public (for now)
@@ -20,11 +26,19 @@ const registerUser = async (req, res) => {
       return res.status(400).json({ message: 'User already exists' });
     }
 
+    const assignedRole = role || 'normal';
+
+    if (assignedRole === 'receptionist') {
+      if (!RECEPTIONIST_EMAILS.includes(email)) {
+        return res.status(403).json({ message: 'Email not authorized for Receptionist role' });
+      }
+    }
+
     const user = await User.create({
       name,
       email,
       password,
-      role: role || 'receptionist',
+      role: assignedRole,
     });
 
     if (user) {
@@ -48,11 +62,21 @@ const registerUser = async (req, res) => {
 // @access  Public
 const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
 
     const user = await User.findOne({ email });
 
     if (user && (await user.matchPassword(password))) {
+      // Role checking logic
+      if (role && user.role !== role) {
+        return res.status(403).json({ message: `Access denied. Registered role is ${user.role}` });
+      }
+      
+      // Receptionist double-check
+      if (user.role === 'receptionist' && !RECEPTIONIST_EMAILS.includes(user.email)) {
+         return res.status(403).json({ message: 'Email not authorized for Receptionist role' });
+      }
+
       res.json({
         _id: user.id,
         name: user.name,
