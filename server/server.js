@@ -10,7 +10,14 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/auth', require('./routes/authRoutes'));
+<<<<<<< Updated upstream
 app.use('/api/admin', require('./routes/adminRoutes'));
+=======
+// app.use('/api/admin', require('./routes/adminRoutes'));
+app.use('/api/doctors', require('./routes/doctorRoutes'));
+app.use('/api/patients', require('./routes/patientRoutes'));
+app.use('/api/appointments', require('./routes/appointmentRoutes'));
+>>>>>>> Stashed changes
 
 app.get('/', (req, res) => {
   res.send('Clinic Management System API');

@@ -2,9 +2,17 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import AdminDashboard from './pages/AdminDashboard';
+import ReceptionistDashboard from './pages/ReceptionistDashboard';
+import UserDashboard from './pages/UserDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+<<<<<<< Updated upstream
 
+=======
+import PatientList from './pages/PatientList';
+import DoctorList from './pages/DoctorList';
+import AppointmentList from './pages/AppointmentList';
+import BookAppointment from './pages/BookAppointment';
+>>>>>>> Stashed changes
 function App() {
   return (
     <Router>
@@ -23,11 +31,25 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* Admin Routes */}
-          <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          {/* Receptionist Routes */}
+          <Route element={<ProtectedRoute allowedRoles={['receptionist']} />}>
+            <Route path="/receptionist/dashboard" element={<ReceptionistDashboard />} />
+            <Route path="/receptionist/patients" element={<PatientList />} />
+            <Route path="/receptionist/doctors" element={<DoctorList />} />
+            <Route path="/receptionist/appointments" element={<AppointmentList />} />
           </Route>
 
+<<<<<<< Updated upstream
+=======
+          {/* Normal User Routes */}
+          <Route element={<ProtectedRoute allowedRoles={['normal']} />}>
+            <Route path="/user/dashboard" element={<UserDashboard />} />
+            <Route path="/user/appointments/book" element={<BookAppointment />} />
+            <Route path="/user/appointments" element={<AppointmentList />} />
+            <Route path="/user/doctors" element={<DoctorList />} />
+          </Route>
+
+>>>>>>> Stashed changes
           {/* Fallback route */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

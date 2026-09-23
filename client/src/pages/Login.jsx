@@ -5,6 +5,7 @@ import { login } from '../api/auth';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('normal');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -14,11 +15,11 @@ const Login = () => {
     setLoading(true);
     setError('');
     try {
-      const data = await login(email, password);
-      if (data.role === 'admin') {
-        navigate('/admin/dashboard');
+      const data = await login(email, password, role);
+      if (data.role === 'receptionist') {
+        navigate('/receptionist/dashboard');
       } else {
-        navigate('/');
+        navigate('/user/dashboard');
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
@@ -96,6 +97,29 @@ const Login = () => {
                 />
               </div>
             </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-surface-700 mb-2">Role</label>
+              <div className="relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-surface-400">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </span>
+                <select
+                  className="w-full pl-12 pr-4 py-3 bg-surface-50 border border-surface-200 rounded-xl text-surface-800 placeholder-surface-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-400 transition-all duration-200 appearance-none"
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                >
+                  <option value="normal">Normal User</option>
+                  <option value="receptionist">Receptionist</option>
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-surface-500">
+                  <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                </div>
+              </div>
+            </div>
+
 
             <button
               type="submit"

@@ -55,6 +55,7 @@ const Navbar = () => {
           <div className="flex items-center gap-2">
             {user ? (
               <>
+<<<<<<< Updated upstream
                 {user.role === 'admin' && (
                   <Link
                     to="/admin/dashboard"
@@ -87,6 +88,98 @@ const Navbar = () => {
                     </svg>
                     Manage Patients
                   </span>
+=======
+                {/* Receptionist Links */}
+                {user.role === 'receptionist' && (
+                  <>
+                    <Link
+                      to="/receptionist/dashboard"
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                        isActive('/receptionist/dashboard')
+                          ? 'bg-primary-50 text-primary-700'
+                          : 'text-surface-600 hover:bg-surface-100 hover:text-surface-800'
+                      }`}
+                    >
+                      Dashboard
+                    </Link>
+                    <Link
+                      to="/receptionist/appointments"
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                        isActive('/receptionist/appointments')
+                          ? 'bg-primary-50 text-primary-700'
+                          : 'text-surface-600 hover:bg-surface-100 hover:text-surface-800'
+                      }`}
+                    >
+                      Applications
+                    </Link>
+                    <Link
+                      to="/receptionist/patients"
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                        isActive('/receptionist/patients')
+                          ? 'bg-primary-50 text-primary-700'
+                          : 'text-surface-600 hover:bg-surface-100 hover:text-surface-800'
+                      }`}
+                    >
+                      Patients
+                    </Link>
+                    <Link
+                      to="/receptionist/doctors"
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                        isActive('/receptionist/doctors')
+                          ? 'bg-primary-50 text-primary-700'
+                          : 'text-surface-600 hover:bg-surface-100 hover:text-surface-800'
+                      }`}
+                    >
+                      Doctors
+                    </Link>
+                  </>
+                )}
+
+                {/* Normal User Links */}
+                {user.role === 'normal' && (
+                  <>
+                    <Link
+                      to="/user/dashboard"
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                        isActive('/user/dashboard')
+                          ? 'bg-primary-50 text-primary-700'
+                          : 'text-surface-600 hover:bg-surface-100 hover:text-surface-800'
+                      }`}
+                    >
+                      Dashboard
+                    </Link>
+                    <Link
+                      to="/user/appointments/book"
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                        isActive('/user/appointments/book')
+                          ? 'bg-primary-50 text-primary-700'
+                          : 'text-surface-600 hover:bg-surface-100 hover:text-surface-800'
+                      }`}
+                    >
+                      Book Appointment
+                    </Link>
+                    <Link
+                      to="/user/appointments"
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                        isActive('/user/appointments')
+                          ? 'bg-primary-50 text-primary-700'
+                          : 'text-surface-600 hover:bg-surface-100 hover:text-surface-800'
+                      }`}
+                    >
+                      Status
+                    </Link>
+                    <Link
+                      to="/user/doctors"
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                        isActive('/user/doctors')
+                          ? 'bg-primary-50 text-primary-700'
+                          : 'text-surface-600 hover:bg-surface-100 hover:text-surface-800'
+                      }`}
+                    >
+                      Doctors
+                    </Link>
+                  </>
+>>>>>>> Stashed changes
                 )}
 
                 <div className="w-px h-8 bg-surface-200 mx-2"></div>
