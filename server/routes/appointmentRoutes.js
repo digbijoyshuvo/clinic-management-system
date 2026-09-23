@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+
 const {
   bookAppointment,
   getAppointments,
@@ -17,5 +18,6 @@ router.route('/:id/approve')
 
 router.route('/:id/cancel')
   .put(protect, cancelAppointment);
+
 
 module.exports = router;

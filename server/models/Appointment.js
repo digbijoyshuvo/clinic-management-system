@@ -48,6 +48,7 @@ const appointmentSchema = new mongoose.Schema({
 
   reason: {
     type: String,
+
   },
 
   createdAt: {

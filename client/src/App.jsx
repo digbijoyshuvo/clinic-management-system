@@ -5,14 +5,13 @@ import Register from './pages/Register';
 import ReceptionistDashboard from './pages/ReceptionistDashboard';
 import UserDashboard from './pages/UserDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
-<<<<<<< Updated upstream
-
-=======
 import PatientList from './pages/PatientList';
 import DoctorList from './pages/DoctorList';
 import AppointmentList from './pages/AppointmentList';
 import BookAppointment from './pages/BookAppointment';
->>>>>>> Stashed changes
+import PatientForm from './pages/PatientForm';
+import PatientDetail from './pages/PatientDetail';
+import DoctorSchedule from './pages/DoctorSchedule';
 function App() {
   return (
     <Router>
@@ -39,8 +38,6 @@ function App() {
             <Route path="/receptionist/appointments" element={<AppointmentList />} />
           </Route>
 
-<<<<<<< Updated upstream
-=======
           {/* Normal User Routes */}
           <Route element={<ProtectedRoute allowedRoles={['normal']} />}>
             <Route path="/user/dashboard" element={<UserDashboard />} />
@@ -49,7 +46,21 @@ function App() {
             <Route path="/user/doctors" element={<DoctorList />} />
           </Route>
 
->>>>>>> Stashed changes
+          {/* Patient Routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/patients" element={<PatientList />} />
+            <Route path="/patients/new" element={<PatientForm />} />
+            <Route path="/patients/:id" element={<PatientDetail />} />
+            <Route path="/patients/:id/edit" element={<PatientForm />} />
+
+            <Route path="/appointments/book" element={<BookAppointment />} />
+            <Route path="/appointments" element={<AppointmentList />} />
+          </Route>
+
+          {/* Doctor Routes */}
+          <Route element={<ProtectedRoute allowedRoles={['doctor']} />}>
+            <Route path="/doctor/schedule" element={<DoctorSchedule />} />
+          </Route>
           {/* Fallback route */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

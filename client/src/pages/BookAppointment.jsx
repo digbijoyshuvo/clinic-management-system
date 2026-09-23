@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createAppointment } from '../api/appointments';
@@ -129,5 +130,6 @@ const BookAppointment = () => {
     </div>
   );
 };
+
 
 export default BookAppointment;

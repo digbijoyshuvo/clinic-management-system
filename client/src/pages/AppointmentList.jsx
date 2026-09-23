@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { getAppointments, approveAppointment, cancelAppointment } from '../api/appointments';
 
@@ -191,5 +192,6 @@ const AppointmentList = () => {
     </div>
   );
 };
+
 
 export default AppointmentList;

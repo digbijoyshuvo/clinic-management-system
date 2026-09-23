@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+
 const {
   createPatient,
   getPatients,
@@ -21,5 +22,6 @@ router.route('/:id')
 
 router.route('/:id/history')
   .post(protect, isReceptionist, addMedicalHistory);
+
 
 module.exports = router;
