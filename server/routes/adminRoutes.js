@@ -1,5 +1,5 @@
 const express = require('express');
-const { protect, requireRole } = require('../middleware/auth');
+const { protect, isAdmin } = require('../middleware/authMiddleware');
 const {
   getStaff,
   createStaff,
@@ -9,7 +9,7 @@ const {
 
 const router = express.Router();
 
-router.use(protect, requireRole('admin'));
+router.use(protect, isAdmin);
 
 router.route('/staff')
   .get(getStaff)

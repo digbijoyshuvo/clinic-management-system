@@ -209,7 +209,6 @@ const Navbar = () => {
                       Doctors
                     </Link>
                   </>
-                  </>
                 )}
 
                 {/* Book Appointment */}
@@ -268,7 +267,6 @@ const Navbar = () => {
                       </svg>
                       Patients
                     </span>
-                  </Link>
                   </Link>
                 )}
 
